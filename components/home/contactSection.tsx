@@ -82,14 +82,9 @@ export default function ContactSection() {
                 <div className="flex-1 pt-2">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                     <a
-                      href="tel:+2348008PRYPAR"
+                      href="tel:+2349020589764"
                       className="text-gray-800 font-medium hover:text-[#0A5DEC] transition-colors">
-                      +234 (0) 800 PRYPAR
-                    </a>
-                    <a
-                      href="tel:+2348008PRYPAR"
-                      className="text-gray-800 font-medium hover:text-[#0A5DEC] transition-colors">
-                      +234 (0) 800 PRYPAR
+                      +234 (0) 902 058 9764
                     </a>
                   </div>
                 </div>
