@@ -1,14 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import LoginForm from "@/components/auth/login/LoginForm";
-import AuthAsideBg from "@/components/common/authAsideBg";
-import DynamicHeader from "@/components/common/dynamicHeader";
-import UserRoleTab, { UserRole } from "@/components/common/userRole";
+import LoginForm from "@/components/LoginForm";
+import AuthAsideBg from "@/components/authAsideBg";
+import DynamicHeader from "@/components/dynamicHeader";
 
 export default function LoginPage() {
-  const [selectedRole, setSelectedRole] = useState<UserRole>("Student");
-
   return (
     <div className="flex min-h-screen">
       {/* Left Aside */}
@@ -19,7 +16,6 @@ export default function LoginPage() {
       {/* Right Content */}
       <div className="flex items-center flex-col justify-center md:w-1/2 w-full px-6">
         <DynamicHeader />
-        {/* <UserRoleTab onChange={setSelectedRole} /> */}
         <LoginForm />
       </div>
     </div>

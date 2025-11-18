@@ -3,12 +3,10 @@
 
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
 
 interface LoginData {
   email: string;
   password: string;
-  role: string;
 }
 
 interface Profile {
@@ -37,7 +35,6 @@ export const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<LoginResponse | null>(null);
-  const router = useRouter();
 
   const login = async (formData: LoginData): Promise<LoginResponse | void> => {
     setLoading(true);
@@ -47,9 +44,7 @@ export const useLogin = () => {
 
     try {
       const response = await axios.post<LoginResponse>(
-        formData.role == "user"
-          ? "http://178.128.64.203:8080/api/v1/auth/login"
-          : "http://178.128.64.203:8080/api/v1/auth/admin-login",
+        "http://178.128.64.203:8080/api/v1/auth/admin-login",
         {
           email: formData.email,
           password: formData.password,
@@ -62,6 +57,8 @@ export const useLogin = () => {
       );
 
       const resData = response.data;
+      console.log("login admin response", resData);
+
       setData(resData);
 
       // ✅ Extract needed fields
@@ -71,17 +68,6 @@ export const useLogin = () => {
       if (accessToken) localStorage.setItem("accessToken", accessToken);
       if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
       if (profile) localStorage.setItem("userProfile", JSON.stringify(profile));
-
-      // ✅ Navigate based on user role
-      if (role === "student") {
-        router.push("/dashboard/student");
-      } else if (role === "tutor") {
-        router.push("/dashboard/tutor");
-      } else if (role === "admin") {
-        router.push("/dashboard/admin");
-      } else {
-        router.push("/dashboard/institution");
-      }
 
       return resData;
     } catch (err: unknown) {

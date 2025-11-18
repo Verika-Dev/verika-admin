@@ -4,17 +4,17 @@ import React, { useState } from "react";
 import { Eye, EyeOff, User, LockKeyhole, Shield } from "lucide-react";
 import Link from "next/link";
 import { useLogin } from "@/hooks/useLogin";
+import { useRouter } from "next/navigation";
 
 function LoginForm() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    role: "user", // default role
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const { login, loading, error, data } = useLogin();
-
+  const router = useRouter();
   const handleInputChange = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -28,11 +28,13 @@ function LoginForm() {
       return;
     }
 
-    await login({
+    const Success = await login({
       email: formData.username,
       password: formData.password,
-      role: formData.role,
     });
+    if (Success) {
+      router.push("/dashboard/admin");
+    }
   };
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -40,28 +42,6 @@ function LoginForm() {
   return (
     <div className="w-full mx-auto p-6 bg-white">
       <div className="space-y-6">
-        {/* Role Selector */}
-        <div>
-          <label
-            htmlFor="role"
-            className="block text-sm font-medium text-gray-900 mb-2">
-            Select Role
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              {/* <Shield className="h-5 w-5 text-gray-400" /> */}
-            </div>
-            <select
-              id="role"
-              value={formData.role}
-              onChange={(e) => handleInputChange("role", e.target.value)}
-              className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#192BC2] focus:border-transparent">
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-        </div>
-
         {/* Email Field */}
         <div>
           <label
@@ -106,7 +86,7 @@ function LoginForm() {
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center">
+              className="absolute inset-y-0 cursor-pointer right-0 pr-3 flex items-center">
               {showPassword ? (
                 <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
               ) : (
