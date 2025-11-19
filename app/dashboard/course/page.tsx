@@ -17,6 +17,7 @@ const CourseContentManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [subjectFilter, setSubjectFilter] = useState("All Subject");
+  const [showCreateForm, setShowCreateForm] = useState(false);
 
   const stats = [
     {
@@ -168,15 +169,16 @@ const CourseContentManagement = () => {
             </p>
           </div>
           <button
-            onClick={() => {
-              console.log("new course");
-            }}
+            onClick={() => setShowCreateForm(true)}
             className="bg-[#0A5DEC] cursor-pointer text-white px-4 py-2 rounded-lg font-medium transition-colors">
             Add New Course
           </button>
         </div>
-
-<CreateCourseForm/>
+        {showCreateForm && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999]">
+            <CreateCourseForm onClose={() => setShowCreateForm(false)} />
+          </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

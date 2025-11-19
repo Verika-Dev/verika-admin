@@ -33,7 +33,7 @@ function LoginForm() {
       password: formData.password,
     });
     if (Success) {
-      router.push("/dashboard/admin");
+      router.push("/dashboard");
     }
   };
 

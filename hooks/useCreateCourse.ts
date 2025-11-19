@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
+import { toast } from "sonner";
 
 interface CoursePayload {
   title: string;
@@ -32,8 +33,10 @@ export const useCreateCourse = () => {
       // Get token from localStorage
       const token = localStorage.getItem("accessToken");
 
+      console.log("admin token", token);
+
       const response = await axios.post<CreateCourseResponse>(
-        "http://localhost:8080/api/v1/courses",
+        "http://178.128.64.203:8080/api/v1/courses",
         {
           title: payload.title,
           subject: payload.subject,
@@ -52,11 +55,11 @@ export const useCreateCourse = () => {
       console.log(resData);
 
       setData(resData);
-
+      toast.success("Course created successfully");
       return resData;
     } catch (err: unknown) {
-        console.log(err);
-        
+      console.log(err);
+
       const axiosError = err as AxiosError<{
         message?: string;
         error?: string;
