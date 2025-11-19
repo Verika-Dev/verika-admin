@@ -11,6 +11,7 @@ import {
   Copy,
   Trash2,
 } from "lucide-react";
+import CreateCourseForm from "@/components/CreateCourseForm";
 
 const CourseContentManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -166,10 +167,16 @@ const CourseContentManagement = () => {
               Manage educational content, courses, and learning materials
             </p>
           </div>
-          <button className="bg-[#0A5DEC] cursor-pointer text-white px-4 py-2 rounded-lg font-medium transition-colors">
+          <button
+            onClick={() => {
+              console.log("new course");
+            }}
+            className="bg-[#0A5DEC] cursor-pointer text-white px-4 py-2 rounded-lg font-medium transition-colors">
             Add New Course
           </button>
         </div>
+
+<CreateCourseForm/>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

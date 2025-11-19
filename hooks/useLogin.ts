@@ -46,8 +46,10 @@ export const useLogin = () => {
       const response = await axios.post<LoginResponse>(
         "http://178.128.64.203:8080/api/v1/auth/admin-login",
         {
-          email: formData.email,
-          password: formData.password,
+          // email: formData.email,
+          // password: formData.password,
+          email: "admin@prypar.com",
+          password: "defaultAdmin123",
         },
         {
           headers: {
