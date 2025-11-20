@@ -12,12 +12,14 @@ import {
   Trash2,
 } from "lucide-react";
 import CreateCourseForm from "@/components/CreateCourseForm";
-
+import { useGetCourses } from "@/hooks/useGetCourse";
 const CourseContentManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [subjectFilter, setSubjectFilter] = useState("All Subject");
   const [showCreateForm, setShowCreateForm] = useState(false);
+
+  useGetCourses();
 
   const stats = [
     {
