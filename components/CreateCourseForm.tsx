@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -7,10 +6,14 @@ import { useCreateCourse } from "@/hooks/useCreateCourse";
 
 interface CreateCourseFormProps {
   onClose: () => void;
+  onOpenUploadModal: () => void;
 }
 
-export default function CreateCourseForm({ onClose }: CreateCourseFormProps) {
-  const { createCourse, loading, error, data } = useCreateCourse();
+export default function CreateCourseForm({
+  onClose,
+  onOpenUploadModal,
+}: CreateCourseFormProps) {
+  const { createCourse, loading, error } = useCreateCourse();
 
   const [formData, setFormData] = useState({
     courseTitle1: "",
@@ -42,10 +45,8 @@ export default function CreateCourseForm({ onClose }: CreateCourseFormProps) {
     "₦50,000.00",
   ];
 
-  // Convert "₦10,000.00" → 10000
-  const convertPrice = (str: string): number => {
-    return Number(str.replace(/[^0-9]/g, ""));
-  };
+  const convertPrice = (str: string): number =>
+    Number(str.replace(/[^0-9]/g, ""));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,23 +68,25 @@ export default function CreateCourseForm({ onClose }: CreateCourseFormProps) {
       price: convertPrice(formData.price),
     };
 
-    await createCourse(payload);
+    const result = await createCourse(payload);
+    console.log(result);
 
-    if (!error) {
+    if (!error && result) {
       onClose();
+      onOpenUploadModal();
     }
   };
 
   return (
-    <div className="bg-gray-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow-lg w-full p-6 sm:p-8 relative">
+    <div className="flex w-full justify-center items-center px-4">
+      <div className="bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 sm:p-8 relative">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
             Add New Course
           </h2>
           <button
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition"
             onClick={onClose}>
             <X size={24} />
           </button>
@@ -97,7 +100,7 @@ export default function CreateCourseForm({ onClose }: CreateCourseFormProps) {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Course Title 1 */}
+          {/* Course Title */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Course Title
@@ -110,24 +113,7 @@ export default function CreateCourseForm({ onClose }: CreateCourseFormProps) {
                 setFormData({ ...formData, courseTitle1: e.target.value })
               }
               className="w-full px-4 py-3 border border-gray-200 rounded-lg 
-              focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-            />
-          </div>
-
-          {/* Course Title 2 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Course Title (Optional)
-            </label>
-            <input
-              type="text"
-              placeholder="Enter course title"
-              value={formData.courseTitle2}
-              onChange={(e) =>
-                setFormData({ ...formData, courseTitle2: e.target.value })
-              }
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg 
-              focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-900"
             />
           </div>
 
@@ -136,17 +122,18 @@ export default function CreateCourseForm({ onClose }: CreateCourseFormProps) {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Subject
             </label>
+
             <button
               type="button"
               onClick={() => setShowSubjectDropdown(!showSubjectDropdown)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg 
-              focus:ring-2 focus:ring-blue-500 text-left text-gray-700 flex items-center justify-between">
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg flex items-center justify-between
+                focus:ring-2 focus:ring-blue-500 text-left text-gray-700">
               <span>{formData.subject || "Select subject"}</span>
               <ChevronDown size={20} />
             </button>
 
             {showSubjectDropdown && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+              <div className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
                 {subjects.map((subject) => (
                   <div
                     key={subject}
@@ -167,17 +154,18 @@ export default function CreateCourseForm({ onClose }: CreateCourseFormProps) {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Syllabus Alignment
             </label>
+
             <button
               type="button"
               onClick={() => setShowSyllabusDropdown(!showSyllabusDropdown)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg 
-              focus:ring-2 focus:ring-blue-500 text-left text-gray-700 flex items-center justify-between">
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg flex items-center justify-between
+                focus:ring-2 focus:ring-blue-500 text-left text-gray-700">
               <span>{formData.syllabus || "Select syllabus"}</span>
               <ChevronDown size={20} />
             </button>
 
             {showSyllabusDropdown && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+              <div className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
                 {syllabi.map((syllabus) => (
                   <div
                     key={syllabus}
@@ -198,17 +186,18 @@ export default function CreateCourseForm({ onClose }: CreateCourseFormProps) {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Price (₦)
             </label>
+
             <button
               type="button"
               onClick={() => setShowPriceDropdown(!showPriceDropdown)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg 
-              focus:ring-2 focus:ring-blue-500 text-left text-gray-700 flex items-center justify-between">
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg flex items-center justify-between
+                focus:ring-2 focus:ring-blue-500 text-left text-gray-700">
               <span>{formData.price || "e.g ₦1,000.00"}</span>
               <ChevronDown size={20} />
             </button>
 
             {showPriceDropdown && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+              <div className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
                 {prices.map((price) => (
                   <div
                     key={price}
@@ -224,20 +213,20 @@ export default function CreateCourseForm({ onClose }: CreateCourseFormProps) {
             )}
           </div>
 
-          {/* Buttons */}
+          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <button
-              onClick={onClose}
               type="button"
-              className="flex-1 px-6 py-3 bg-blue-50 text-blue-700 font-medium rounded-lg hover:bg-blue-100 transition-colors">
+              onClick={onClose}
+              className="flex-1 px-6 py-3 cursor-pointer bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 font-medium transition">
               Cancel
             </button>
 
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50">
-              {loading ? "Submitting..." : "Upload Content"}
+              className="flex-1 px-6 py-3 cursor-pointer bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition disabled:opacity-50">
+              Upload Content
             </button>
           </div>
         </form>

@@ -13,11 +13,13 @@ import {
 } from "lucide-react";
 import CreateCourseForm from "@/components/CreateCourseForm";
 import { useGetCourses } from "@/hooks/useGetCourse";
+import UploadContentModal from "@/components/UploadContentForm";
 const CourseContentManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [subjectFilter, setSubjectFilter] = useState("All Subject");
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
 
   useGetCourses();
 
@@ -177,8 +179,21 @@ const CourseContentManagement = () => {
           </button>
         </div>
         {showCreateForm && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
+            <CreateCourseForm
+              onClose={() => setShowCreateForm(false)}
+              onOpenUploadModal={() => {
+                setShowCreateForm(false); 
+                setShowUploadModal(true); 
+              }}
+            />
+          </div>
+        )}
+
+        {/* Upload Content Modal */}
+        {showUploadModal && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999]">
-            <CreateCourseForm onClose={() => setShowCreateForm(false)} />
+            <UploadContentModal onClose={() => setShowUploadModal(false)} />
           </div>
         )}
 
